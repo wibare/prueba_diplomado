@@ -30,10 +30,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $precio = $_POST["precio"] ?? "";
     $stock = $_POST["stock"] ?? "";
 
-    if ($nombre === "" || $categoria === "" || $precio === "" || $stock === "") {
-      $error = "Todos los campos son obligatorios.";
-    } elseif (!is_numeric($precio) || floatval($precio) < 0 || !is_numeric($stock) || intval($stock) < 0) {
-      $error = "El precio y el stock deben ser números mayores o iguales a 0.";
+    if ($nombre === "" || $categoria === "" || $precio === "" || $stock === ""|| strlen($nombre) < 3) {
+      $error = "Todos los campos son obligatorios. El nombre debe tener por lo menos 3 caracteres.";
+    } elseif (!is_numeric($precio) || floatval($precio) < 1000 || !is_numeric($stock) || intval($stock) < 0) {
+      $error = "El precio debe ser mayor a 1000 y el stock debe ser un número mayor o igual a 0.";
     } else {
       if ($id > 0) {
         // UPDATE: Actualizar producto existente
@@ -171,7 +171,7 @@ foreach ($productos as $p) {
         <label>Categoría</label>
         <select name="categoria">
           <?php
-            $categorias = ["Computadores", "Monitores", "Accesorios", "Almacenamiento"];
+            $categorias = ["Computadores", "Monitores", "Accesorios", "Almacenamiento", "Audio", "Redes"];
             foreach ($categorias as $cat):
               $sel = ($productoEditar["categoria"] === $cat) ? "selected" : "";
           ?>
@@ -180,7 +180,7 @@ foreach ($productos as $p) {
         </select>
 
         <label>Precio unitario ($ COP)</label>
-        <input type="number" name="precio" min="0" step="100" required value="<?= htmlspecialchars($productoEditar["precio"]) ?>">
+        <input type="number" name="precio" min="0" step="1000" required value="<?= htmlspecialchars($productoEditar["precio"]) ?>">
 
         <label>Stock (unidades)</label>
         <input type="number" name="stock" min="0" step="1" required value="<?= htmlspecialchars($productoEditar["stock"]) ?>">
